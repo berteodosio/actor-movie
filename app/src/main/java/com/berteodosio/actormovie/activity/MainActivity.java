@@ -26,7 +26,6 @@ public class MainActivity extends BaseActivity implements MainView {
         setContentView(R.layout.main_activity);
 
         mPresenter = new MainPresenter(this);
-
         initComponents();
     }
 
@@ -54,8 +53,11 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     private void onShowClick() {
-        ViewAnimation.doContractHorizontalAnimation(mShow);
-        mPresenter.loadActorMovies(mName.getText().toString());
+        if (mName.getError() == null) {
+            ViewAnimation.doContractHorizontalAnimation(mShow);
+            showLoading();
+            mPresenter.loadActorMovies(mName.getText().toString());
+        }
     }
 
     @Override

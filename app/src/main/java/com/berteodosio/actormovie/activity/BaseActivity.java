@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.berteodosio.actormovie.R;
 
 public class BaseActivity extends AppCompatActivity {
+    private ViewGroup mProgressBarLayout;
 
     @Override
     public void setContentView(int layoutResID) {
@@ -31,6 +32,15 @@ public class BaseActivity extends AppCompatActivity {
             }
         });
 
+        mProgressBarLayout = (ViewGroup) root.findViewById(R.id.base_progressBar_layout);
         super.setContentView(root);
+    }
+
+    public void showLoading() {
+        mProgressBarLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void hideLoading() {
+        mProgressBarLayout.setVisibility(View.GONE);
     }
 }
