@@ -1,11 +1,11 @@
 package com.berteodosio.actormovie.presenter;
 
+import com.berteodosio.actormovie.asynctask.LoadActorsAsyncTask;
+import com.berteodosio.actormovie.callback.LoadActorsCallback;
+import com.berteodosio.actormovie.model.ActorSearchResult;
 import com.berteodosio.actormovie.view.MainView;
 
-/**
- * Created by bernardo on 17/10/15.
- */
-public class MainPresenter {
+public class MainPresenter implements LoadActorsCallback {
     private MainView mView;
     
     public MainPresenter(MainView view) {
@@ -13,6 +13,11 @@ public class MainPresenter {
     }
 
     public void loadActorMovies(String actorName) {
+        new LoadActorsAsyncTask(this).execute(actorName);
+    }
+
+    @Override
+    public void onActorsLoaded(ActorSearchResult actors) {
 
     }
 }
