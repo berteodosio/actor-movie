@@ -1,6 +1,7 @@
 package com.berteodosio.actormovie.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,11 +9,15 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.berteodosio.actormovie.R;
+import com.berteodosio.actormovie.activity.base.BaseActivity;
 import com.berteodosio.actormovie.animation.ViewAnimation;
+import com.berteodosio.actormovie.model.Movie;
 import com.berteodosio.actormovie.presenter.MainPresenter;
 import com.berteodosio.actormovie.validator.Validator;
 import com.berteodosio.actormovie.validator.general.EditTextValidator;
 import com.berteodosio.actormovie.view.MainView;
+
+import java.util.List;
 
 public class MainActivity extends BaseActivity implements MainView {
     private MainPresenter mPresenter;
@@ -75,5 +80,12 @@ public class MainActivity extends BaseActivity implements MainView {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void displayMovieList(List<Movie> movieList) {
+        for (Movie m : movieList) {
+            Log.i("EH NOIS: ", m.title());
+        }
     }
 }

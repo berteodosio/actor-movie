@@ -1,4 +1,4 @@
-package com.berteodosio.actormovie.activity;
+package com.berteodosio.actormovie.activity.base;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
