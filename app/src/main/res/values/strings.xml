@@ -2,4 +2,6 @@
     <string name="app_name">ActorMovie</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_base">BaseActivity</string>
+    <string name="main_activity_actorName">Digite o nome do ator:</string>
+    <string name="main_acitivity_showActorMovies">Listar</string>
 </resources>

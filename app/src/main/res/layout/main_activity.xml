@@ -6,8 +6,26 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:gravity="center|left"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/main_activity_actorNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/main_activity_actorName"/>
+    <EditText
+        android:id="@+id/main_activity_actorName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/main_activity_actorNameLabel"
+        android:inputType="textPersonName"/>
+    <Button
+        android:id="@+id/main_activity_showMovies"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/main_activity_actorName"
+        android:text="@string/main_acitivity_showActorMovies"/>
 
 </RelativeLayout>
