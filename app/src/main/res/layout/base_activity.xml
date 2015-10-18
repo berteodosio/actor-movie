@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -11,21 +11,28 @@
         android:layout_height="match_parent" android:fitsSystemWindows="true"
         tools:context="com.berteodosio.actormovie.activity.base.BaseActivity">
 
-        <android.support.design.widget.AppBarLayout android:layout_height="wrap_content"
-            android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay">
-
-            <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
-                android:title="ActorMovie"
-                android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-        </android.support.design.widget.AppBarLayout>
-
         <RelativeLayout
-            android:id="@+id/base_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
 
+            <android.support.design.widget.AppBarLayout android:layout_height="wrap_content"
+                android:id="@+id/toolbar_layout"
+                android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay">
+
+                <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
+                    android:title="ActorMovie"
+                    android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+            </android.support.design.widget.AppBarLayout>
+
+            <RelativeLayout
+                android:id="@+id/base_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/toolbar_layout"/>
+
+        </RelativeLayout>
         <android.support.design.widget.FloatingActionButton android:id="@+id/fab"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:layout_gravity="bottom|end" android:layout_margin="@dimen/fab_margin"
@@ -45,4 +52,4 @@
             android:layout_height="@dimen/base_progressBar_height"
             android:indeterminate="true"/>
     </RelativeLayout>
-</FrameLayout>
+</RelativeLayout>

@@ -38,7 +38,7 @@ public class MovieListActivity extends BaseActivity implements MovieListView {
         mAdapter = new MovieListAdapter();
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.movie_list_activity_recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(mAdapter);
 
         mPresenter = new MovieListPresenter(this);
