@@ -5,4 +5,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="base_progressBar_width">48dp</dimen>
     <dimen name="base_progressBar_height">48dp</dimen>
+    <dimen name="movie_list_recycler_view_movieTitleMargin">16dp</dimen>
 </resources>

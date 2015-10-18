@@ -1,5 +1,6 @@
 package com.berteodosio.actormovie.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,7 +11,9 @@ import android.widget.EditText;
 
 import com.berteodosio.actormovie.R;
 import com.berteodosio.actormovie.activity.base.BaseActivity;
+import com.berteodosio.actormovie.adapter.MovieListAdapter;
 import com.berteodosio.actormovie.animation.ViewAnimation;
+import com.berteodosio.actormovie.model.Actor;
 import com.berteodosio.actormovie.model.Movie;
 import com.berteodosio.actormovie.presenter.MainPresenter;
 import com.berteodosio.actormovie.validator.Validator;
@@ -60,8 +63,7 @@ public class MainActivity extends BaseActivity implements MainView {
     private void onShowClick() {
         if (mName.getError() == null) {
             ViewAnimation.doContractHorizontalAnimation(mShow);
-            showLoading();
-            mPresenter.loadActorMovies(mName.getText().toString());
+            mPresenter.getActorId(mName.getText().toString());
         }
     }
 
@@ -83,9 +85,10 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     @Override
-    public void displayMovieList(List<Movie> movieList) {
-        for (Movie m : movieList) {
-            Log.i("EH NOIS: ", m.title());
-        }
+    public void displayActorInfo(Actor actor) {
+        Intent intent = new Intent(this, MovieListActivity.class);
+        intent.putExtra(MovieListActivity.EXTRA_ACTOR_ID, actor.id());
+        intent.putExtra(MovieListActivity.EXTRA_ACTOR_NAME, actor.name());
+        startActivity(intent);
     }
 }
