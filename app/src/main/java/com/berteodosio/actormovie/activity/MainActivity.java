@@ -2,13 +2,17 @@ package com.berteodosio.actormovie.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.berteodosio.actormovie.R;
 import com.berteodosio.actormovie.activity.base.BaseActivity;
@@ -26,8 +30,10 @@ import java.util.List;
 public class MainActivity extends BaseActivity implements MainView {
     private MainPresenter mPresenter;
 
+    private LinearLayout mLayout;
     private EditText mName;
     private Button mShow;
+    private FloatingActionButton mAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,8 @@ public class MainActivity extends BaseActivity implements MainView {
     private void initComponents() {
         mName = (EditText) findViewById(R.id.main_activity_actorName);
         mShow = (Button) findViewById(R.id.main_activity_showMovies);
+        mAdd = (FloatingActionButton) findViewById(R.id.main_activity_addActor);
+        mLayout = (LinearLayout) findViewById(R.id.main_activity_editTextLayout);
 
         initListeners();
     }
@@ -59,6 +67,20 @@ public class MainActivity extends BaseActivity implements MainView {
                 Validator.validateName(editText);
             }
         });
+
+        mAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onAddClick();
+            }
+        });
+    }
+
+    private void onAddClick() {
+        EditText editText = new EditText(this);
+        LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+
+        mLayout.addView(editText, layoutParams);
     }
 
     private void onShowClick() {
