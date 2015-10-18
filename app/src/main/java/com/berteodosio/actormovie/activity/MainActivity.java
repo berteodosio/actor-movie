@@ -62,7 +62,8 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     private void onShowClick() {
-        if (mName.getError() == null) {
+        if (mName.getError() == null && !mName.getText().toString().equals("")) {
+            showLoading();
             ViewAnimation.doContractHorizontalAnimation(mShow);
             mPresenter.getActorId(mName.getText().toString());
         }
@@ -87,6 +88,7 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     public void displayActorInfo(Actor actor) {
+        hideLoading();
         Intent intent = new Intent(this, MovieListActivity.class);
         intent.putExtra(MovieListActivity.EXTRA_ACTOR_ID, actor.id());
         intent.putExtra(MovieListActivity.EXTRA_ACTOR_NAME, actor.name());
