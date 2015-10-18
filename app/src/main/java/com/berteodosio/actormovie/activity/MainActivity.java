@@ -2,6 +2,7 @@ package com.berteodosio.actormovie.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -90,5 +91,11 @@ public class MainActivity extends BaseActivity implements MainView {
         intent.putExtra(MovieListActivity.EXTRA_ACTOR_ID, actor.id());
         intent.putExtra(MovieListActivity.EXTRA_ACTOR_NAME, actor.name());
         startActivity(intent);
+    }
+
+    @Override
+    public void displayNoActorsFound() {
+        Snackbar.make(mName, "Nenhum ator encontrado", Snackbar.LENGTH_LONG)
+                .show();
     }
 }

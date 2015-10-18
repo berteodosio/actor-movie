@@ -7,4 +7,6 @@ import com.berteodosio.actormovie.model.Actor;
  */
 public interface MainView {
     void displayActorInfo(Actor actor);
+
+    void displayNoActorsFound();
 }
