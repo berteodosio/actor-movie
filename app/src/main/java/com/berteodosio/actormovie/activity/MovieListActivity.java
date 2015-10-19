@@ -18,20 +18,20 @@ import java.util.List;
  * Created by bernardo on 17/10/15.
  */
 public class MovieListActivity extends BaseActivity implements MovieListView {
-    public static final String EXTRA_ACTOR_ID = "actor_id";
-    public static final String EXTRA_ACTOR_NAME = "actor_name";
+    public static final String EXTRA_ACTOR_ID_LIST = "actor_id";
+    public static final String EXTRA_ACTOR_NAME_LIST = "actor_name";
 
     private MovieListPresenter mPresenter;
     private MovieListAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // TODO: arrumar loading infinito quando busca, volta, busca
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_list_activity);
 
         showLoading();
-        Bundle extras = getIntent().getExtras();
-        getSupportActionBar().setTitle(extras.getString(EXTRA_ACTOR_NAME));
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
@@ -41,8 +41,14 @@ public class MovieListActivity extends BaseActivity implements MovieListView {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(mAdapter);
 
+        Bundle extras = getIntent().getExtras();
+
+        List<Integer> actorIds = (List) extras.get(EXTRA_ACTOR_ID_LIST);
+        List<String> actorNames = (List) extras.get(EXTRA_ACTOR_NAME_LIST);
+
         mPresenter = new MovieListPresenter(this);
-        mPresenter.loadMovies(extras.getInt(EXTRA_ACTOR_ID));
+        mPresenter.loadMovies(actorIds.get(1));
+        getSupportActionBar().setTitle(actorNames.get(1));
     }
 
     @Override

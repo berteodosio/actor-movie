@@ -4,36 +4,36 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.berteodosio.actormovie.R;
 import com.berteodosio.actormovie.activity.base.BaseActivity;
-import com.berteodosio.actormovie.adapter.MovieListAdapter;
 import com.berteodosio.actormovie.animation.ViewAnimation;
 import com.berteodosio.actormovie.model.Actor;
-import com.berteodosio.actormovie.model.Movie;
 import com.berteodosio.actormovie.presenter.MainPresenter;
 import com.berteodosio.actormovie.validator.Validator;
 import com.berteodosio.actormovie.validator.general.EditTextValidator;
 import com.berteodosio.actormovie.view.MainView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity implements MainView {
     private MainPresenter mPresenter;
 
     private LinearLayout mLayout;
-    private EditText mName;
     private Button mShow;
     private FloatingActionButton mAdd;
+
+    private List<EditText> mActorNameList = new ArrayList<>();
+    private List<Integer> mActorIds = new ArrayList<>(); // preenchido conforme as buscas ocorrem
+    private List<String> mActorNames = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +45,24 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     private void initComponents() {
-        mName = (EditText) findViewById(R.id.main_activity_actorName);
+        EditText actorName = (EditText) findViewById(R.id.main_activity_actorName);
         mShow = (Button) findViewById(R.id.main_activity_showMovies);
         mAdd = (FloatingActionButton) findViewById(R.id.main_activity_addActor);
         mLayout = (LinearLayout) findViewById(R.id.main_activity_editTextLayout);
 
         initListeners();
+
+        initEditTextListener(actorName);
+        mActorNameList.add(actorName);
+    }
+
+    private void initEditTextListener(EditText editText) {
+        editText.addTextChangedListener(new EditTextValidator(editText) {
+            @Override
+            public void validate(EditText editText) {
+                Validator.validateName(editText);
+            }
+        });
     }
 
     private void initListeners() {
@@ -58,13 +70,6 @@ public class MainActivity extends BaseActivity implements MainView {
             @Override
             public void onClick(View v) {
                 onShowClick();
-            }
-        });
-
-        mName.addTextChangedListener(new EditTextValidator(mName) {
-            @Override
-            public void validate(EditText editText) {
-                Validator.validateName(editText);
             }
         });
 
@@ -77,18 +82,43 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     private void onAddClick() {
+        ViewAnimation.doLittleBigAnimation(mAdd);
         EditText editText = new EditText(this);
         LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
         mLayout.addView(editText, layoutParams);
+        mActorNameList.add(editText);;
     }
 
     private void onShowClick() {
-        if (mName.getError() == null && !mName.getText().toString().equals("")) {
-            showLoading();
-            ViewAnimation.doContractHorizontalAnimation(mShow);
-            mPresenter.getActorId(mName.getText().toString());
+        showLoading();
+        ViewAnimation.doContractHorizontalAnimation(mShow);
+
+        for (EditText editText : mActorNameList) {
+//            if (editText.getError() == null && !editText.getText().toString().equals(""))
+            mPresenter.getActorId(editText.getText().toString());
         }
+    }
+
+    @Override
+    public void displayActorInfo(Actor actor) {
+        mActorIds.add(actor.id());
+        mActorNames.add(actor.name());
+
+        // já carregou os ids de todos os atores
+        if (mActorIds.size() == mActorNameList.size()) {
+            hideLoading();
+            Intent intent = new Intent(this, MovieListActivity.class);
+            intent.putExtra(MovieListActivity.EXTRA_ACTOR_ID_LIST, (ArrayList) mActorIds);
+            intent.putExtra(MovieListActivity.EXTRA_ACTOR_NAME_LIST, (ArrayList) mActorNames);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void displayNoActorsFound() {
+        Snackbar.make(mShow, "Nenhum ator encontrado", Snackbar.LENGTH_LONG)
+                .show();
     }
 
     @Override
@@ -106,20 +136,5 @@ public class MainActivity extends BaseActivity implements MainView {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void displayActorInfo(Actor actor) {
-        hideLoading();
-        Intent intent = new Intent(this, MovieListActivity.class);
-        intent.putExtra(MovieListActivity.EXTRA_ACTOR_ID, actor.id());
-        intent.putExtra(MovieListActivity.EXTRA_ACTOR_NAME, actor.name());
-        startActivity(intent);
-    }
-
-    @Override
-    public void displayNoActorsFound() {
-        Snackbar.make(mName, "Nenhum ator encontrado", Snackbar.LENGTH_LONG)
-                .show();
     }
 }
