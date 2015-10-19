@@ -18,6 +18,7 @@ import java.util.List;
 public class MovieListActivity extends BaseActivity implements MovieListView {
     public static final String EXTRA_ACTOR_ID_LIST = "actor_id";
     public static final String EXTRA_ACTOR_NAME_LIST = "actor_name";
+    public static final int REQUEST_CODE = 1;
 
     private MovieListPresenter mPresenter;
     private MovieListAdapter mAdapter;

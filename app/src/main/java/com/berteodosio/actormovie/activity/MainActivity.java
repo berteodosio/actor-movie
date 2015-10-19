@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity implements MainView {
+    private static final String TAG = MainActivity.class.getSimpleName();
     private MainPresenter mPresenter;
 
     private EditText mFirstActorName;
@@ -96,6 +97,7 @@ public class MainActivity extends BaseActivity implements MainView {
         ViewAnimation.doContractHorizontalAnimation(mShow);
 
         for (EditText editText : mActorEditTextList) {
+            // TODO: fazer verificação aqui
 //            if (editText.getError() == null && !editText.getText().toString().equals(""))
             mPresenter.getActorId(editText.getText().toString());
         }
@@ -112,7 +114,7 @@ public class MainActivity extends BaseActivity implements MainView {
             Intent intent = new Intent(this, MovieListActivity.class);
             intent.putExtra(MovieListActivity.EXTRA_ACTOR_ID_LIST, (ArrayList) mActorIds);
             intent.putExtra(MovieListActivity.EXTRA_ACTOR_NAME_LIST, (ArrayList) mActorNames);
-            startActivity(intent);
+            startActivityForResult(intent, MovieListActivity.REQUEST_CODE);
         }
     }
 
@@ -149,5 +151,10 @@ public class MainActivity extends BaseActivity implements MainView {
         mActorNames.clear();
 
         mActorEditTextList.add(mFirstActorName);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        recreate();
     }
 }
