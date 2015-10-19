@@ -15,7 +15,16 @@ public class Movie {
     @SerializedName("release_date") private String releaseDate;
     @SerializedName("title") private String title;
 
+    public int id() {
+        return id;
+    }
+
     public String title() {
         return title;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Movie && this.id == ((Movie) o).id;
     }
 }

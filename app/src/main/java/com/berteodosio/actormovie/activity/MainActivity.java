@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,11 +28,12 @@ import java.util.List;
 public class MainActivity extends BaseActivity implements MainView {
     private MainPresenter mPresenter;
 
+    private EditText mFirstActorName;
     private LinearLayout mLayout;
     private Button mShow;
     private FloatingActionButton mAdd;
 
-    private List<EditText> mActorNameList = new ArrayList<>();
+    private List<EditText> mActorEditTextList = new ArrayList<>();
     private List<Integer> mActorIds = new ArrayList<>(); // preenchido conforme as buscas ocorrem
     private List<String> mActorNames = new ArrayList<>();
 
@@ -45,15 +47,14 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     private void initComponents() {
-        EditText actorName = (EditText) findViewById(R.id.main_activity_actorName);
+        mFirstActorName = (EditText) findViewById(R.id.main_activity_actorName);
         mShow = (Button) findViewById(R.id.main_activity_showMovies);
         mAdd = (FloatingActionButton) findViewById(R.id.main_activity_addActor);
         mLayout = (LinearLayout) findViewById(R.id.main_activity_editTextLayout);
 
         initListeners();
 
-        initEditTextListener(actorName);
-        mActorNameList.add(actorName);
+        initEditTextListener(mFirstActorName);
     }
 
     private void initEditTextListener(EditText editText) {
@@ -87,14 +88,14 @@ public class MainActivity extends BaseActivity implements MainView {
         LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
         mLayout.addView(editText, layoutParams);
-        mActorNameList.add(editText);;
+        mActorEditTextList.add(editText);
     }
 
     private void onShowClick() {
         showLoading();
         ViewAnimation.doContractHorizontalAnimation(mShow);
 
-        for (EditText editText : mActorNameList) {
+        for (EditText editText : mActorEditTextList) {
 //            if (editText.getError() == null && !editText.getText().toString().equals(""))
             mPresenter.getActorId(editText.getText().toString());
         }
@@ -106,7 +107,7 @@ public class MainActivity extends BaseActivity implements MainView {
         mActorNames.add(actor.name());
 
         // já carregou os ids de todos os atores
-        if (mActorIds.size() == mActorNameList.size()) {
+        if (mActorIds.size() == mActorEditTextList.size()) {
             hideLoading();
             Intent intent = new Intent(this, MovieListActivity.class);
             intent.putExtra(MovieListActivity.EXTRA_ACTOR_ID_LIST, (ArrayList) mActorIds);
@@ -117,6 +118,7 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     public void displayNoActorsFound() {
+        // TODO: arrumar displayNoActorsFound() e seu uso
         Snackbar.make(mShow, "Nenhum ator encontrado", Snackbar.LENGTH_LONG)
                 .show();
     }
@@ -136,5 +138,16 @@ public class MainActivity extends BaseActivity implements MainView {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // TODO: arrumar bug (quando usuário volta e vai de novo, só pega filmes de 1)
+        mActorEditTextList.clear();
+        mActorIds.clear();
+        mActorNames.clear();
+
+        mActorEditTextList.add(mFirstActorName);
     }
 }

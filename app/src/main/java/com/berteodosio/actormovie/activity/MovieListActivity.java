@@ -3,7 +3,7 @@ package com.berteodosio.actormovie.activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.widget.TextView;
 
 import com.berteodosio.actormovie.R;
 import com.berteodosio.actormovie.activity.base.BaseActivity;
@@ -12,17 +12,18 @@ import com.berteodosio.actormovie.model.Movie;
 import com.berteodosio.actormovie.presenter.MovieListPresenter;
 import com.berteodosio.actormovie.view.MovieListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by bernardo on 17/10/15.
- */
 public class MovieListActivity extends BaseActivity implements MovieListView {
     public static final String EXTRA_ACTOR_ID_LIST = "actor_id";
     public static final String EXTRA_ACTOR_NAME_LIST = "actor_name";
 
     private MovieListPresenter mPresenter;
     private MovieListAdapter mAdapter;
+
+    private List<Integer> mActorIds;
+    private List<List<Movie>> mActorsMoviesList = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,7 @@ public class MovieListActivity extends BaseActivity implements MovieListView {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setTitle("Filmes");
 
         mAdapter = new MovieListAdapter();
 
@@ -43,17 +45,29 @@ public class MovieListActivity extends BaseActivity implements MovieListView {
 
         Bundle extras = getIntent().getExtras();
 
-        List<Integer> actorIds = (List) extras.get(EXTRA_ACTOR_ID_LIST);
+        mActorIds = (List) extras.get(EXTRA_ACTOR_ID_LIST);
         List<String> actorNames = (List) extras.get(EXTRA_ACTOR_NAME_LIST);
 
+        TextView textView = (TextView) findViewById(R.id.movie_list_activity_actorName);
+
+        String text = "";
+        for (String s : actorNames)
+            text += s + "\n";
+
+        textView.setText(text);
+
         mPresenter = new MovieListPresenter(this);
-        mPresenter.loadMovies(actorIds.get(1));
-        getSupportActionBar().setTitle(actorNames.get(1));
+        for (Integer i : mActorIds)
+            mPresenter.loadMovies(i);
     }
 
     @Override
     public void displayMovieList(List<Movie> movieList) {
-        mAdapter.updateMovies(movieList);
-        hideLoading();
+        mActorsMoviesList.add(movieList);
+        if (mActorsMoviesList.size() == mActorIds.size()) {
+            hideLoading();
+            List<Movie> moviesFromAllActors = mPresenter.searchMoviesFromAllActors(mActorsMoviesList);
+            mAdapter.updateMovies(moviesFromAllActors);
+        }
     }
 }
