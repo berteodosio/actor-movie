@@ -4,7 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
+import android.support.v7.widget.AppCompatEditText;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,6 +56,7 @@ public class MainActivity extends BaseActivity implements MainView {
 
         initListeners();
 
+        mActorEditTextList.add(mFirstActorName);
         initEditTextListener(mFirstActorName);
     }
 
@@ -85,7 +87,8 @@ public class MainActivity extends BaseActivity implements MainView {
 
     private void onAddClick() {
         ViewAnimation.doLittleBigAnimation(mAdd);
-        EditText editText = new EditText(this);
+        AppCompatEditText editText = new AppCompatEditText(this);
+        editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
         LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
         mLayout.addView(editText, layoutParams);
@@ -140,17 +143,6 @@ public class MainActivity extends BaseActivity implements MainView {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // TODO: arrumar bug (quando usuário volta e vai de novo, só pega filmes de 1)
-        mActorEditTextList.clear();
-        mActorIds.clear();
-        mActorNames.clear();
-
-        mActorEditTextList.add(mFirstActorName);
     }
 
     @Override
