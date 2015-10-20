@@ -2,10 +2,12 @@ package com.berteodosio.actormovie.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,11 +39,14 @@ public class MainActivity extends BaseActivity implements MainView {
     private List<Integer> mActorIds = new ArrayList<>(); // preenchido conforme as buscas ocorrem
     private List<String> mActorNames = new ArrayList<>();
 
+    private boolean mNameNotFound = false; // previne mostrar snackbar várias vezes
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
+        // TODO add no internet verification
         getSupportActionBar().setTitle(R.string.main_activity_toolbarTitle);
 
         mPresenter = new MainPresenter(this);
@@ -96,6 +101,15 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     private void onShowClick() {
+        mShow.setEnabled(false);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mShow.setEnabled(true);
+            }
+        }, 1000);
+
+        // verifica se todos os campos foram preenchidos corretamente
         for (EditText editText : mActorEditTextList) {
             if (editText.getError() != null || editText.getText().toString().equals("")) {
                 Snackbar.make(editText, "Preencha todos os campos corretamente", Snackbar.LENGTH_SHORT)
@@ -108,8 +122,8 @@ public class MainActivity extends BaseActivity implements MainView {
         ViewAnimation.doContractHorizontalAnimation(mShow);
 
         for (EditText editText : mActorEditTextList) {
-            // TODO: fazer verificação aqui
-//            if (editText.getError() == null && !editText.getText().toString().equals(""))
+            if (mNameNotFound)
+                break;
             mPresenter.getActorId(editText.getText().toString());
         }
     }
@@ -130,10 +144,23 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     @Override
-    public void displayNoActorsFound() {
-        // TODO: arrumar displayNoActorsFound() e seu uso
-        Snackbar.make(mShow, "Nenhum ator encontrado", Snackbar.LENGTH_LONG)
-                .show();
+    public void displayActorNotFound(String searchedActorName) {
+        // TODO: arrumar displayActorNotFound() e seu uso
+        mActorIds.clear();
+        mActorNames.clear();
+
+        hideLoading();
+        if (!mNameNotFound)
+            Snackbar.make(mShow, "\"" + searchedActorName + "\" não encontrado", Snackbar.LENGTH_SHORT)
+                    .show();
+
+        mNameNotFound = true;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mNameNotFound = false;
+            }
+        }, 500);
     }
 
     @Override

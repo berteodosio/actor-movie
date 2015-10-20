@@ -9,20 +9,22 @@ import com.berteodosio.actormovie.remote.client.LoadActorsRemoteClient;
 /**
  * Created by bernardo on 17/10/15.
  */
-public class LoadActorsAsyncTask extends AsyncTask<String, Void, ActorSearchResult> {
+public class LoadActorsAsyncTask extends AsyncTask<Void, Void, ActorSearchResult> {
     private LoadActorsCallback mCallback;
+    private String mSearchedActorName;
 
-    public LoadActorsAsyncTask(LoadActorsCallback callback) {
+    public LoadActorsAsyncTask(LoadActorsCallback callback, String searchedActorName) {
         mCallback = callback;
+        mSearchedActorName = searchedActorName;
     }
 
     @Override
-    protected ActorSearchResult doInBackground(String... params) {
-        return LoadActorsRemoteClient.loadActors(params[0]);
+    protected ActorSearchResult doInBackground(Void... params) {
+        return LoadActorsRemoteClient.loadActors(mSearchedActorName);
     }
 
     @Override
     protected void onPostExecute(ActorSearchResult actors) {
-        mCallback.onActorsLoaded(actors);
+        mCallback.onActorsLoaded(actors, mSearchedActorName);
     }
 }

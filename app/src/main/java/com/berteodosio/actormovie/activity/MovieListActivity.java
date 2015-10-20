@@ -29,7 +29,6 @@ public class MovieListActivity extends BaseActivity implements MovieListView {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        // TODO: arrumar loading infinito quando busca, volta, busca
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_list_activity);
 

@@ -16,15 +16,15 @@ public class MainPresenter implements LoadActorsCallback {
     }
 
     public void getActorId(String actorName) {
-        new LoadActorsAsyncTask(this).execute(actorName);
+        new LoadActorsAsyncTask(this, actorName).execute();
     }
 
     @Override
-    public void onActorsLoaded(ActorSearchResult actors) {
+    public void onActorsLoaded(ActorSearchResult actors, String searchedActorName) {
         List<Actor> actorList = actors.getActorsList();
         if (actorList.size() != 0)
             mView.displayActorInfo(actorList.get(0));
         else
-            mView.displayNoActorsFound();
+            mView.displayActorNotFound(searchedActorName);
     }
 }
