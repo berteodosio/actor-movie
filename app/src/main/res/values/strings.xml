@@ -6,4 +6,9 @@
     <string name="main_acitivity_showActorMovies">Listar</string>
     <string name="movie_list_activity_searchedActors">Atores procurados</string>
     <string name="movie_list_activity_movies">Filmes</string>
+    <string name="movie_list_activity_foundedMovies">Filmes encontrados</string>
+    <string name="main_activity_toolbarTitle">Atores</string>
+    <string name="movie_list_activity_toolbarTitle">Filmes</string>
+    <string name="movie_list_activity_serachedActors_single">Ator procurado</string>
+    <string name="movie_list_activity_foundedMovies_single">Filme encontrado</string>
 </resources>

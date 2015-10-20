@@ -1,6 +1,7 @@
 package com.berteodosio.actormovie.activity;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
@@ -34,9 +35,10 @@ public class MovieListActivity extends BaseActivity implements MovieListView {
 
         showLoading();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setTitle("Filmes");
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setTitle(R.string.movie_list_activity_toolbarTitle);
 
         mAdapter = new MovieListAdapter();
 
@@ -57,6 +59,10 @@ public class MovieListActivity extends BaseActivity implements MovieListView {
 
         textView.setText(text);
 
+        if (actorNames.size() == 1)
+            ((TextView) findViewById(R.id.movie_list_activity_searchedActors))
+                    .setText(R.string.movie_list_activity_serachedActors_single);
+
         mPresenter = new MovieListPresenter(this);
         for (Integer i : mActorIds)
             mPresenter.loadMovies(i);
@@ -69,6 +75,10 @@ public class MovieListActivity extends BaseActivity implements MovieListView {
             hideLoading();
             List<Movie> moviesFromAllActors = mPresenter.searchMoviesFromAllActors(mActorsMoviesList);
             mAdapter.updateMovies(moviesFromAllActors);
+
+            if (moviesFromAllActors.size() == 1)
+                ((TextView) findViewById(R.id.movie_list_activity_foundedMovies))
+                        .setText(R.string.movie_list_activity_foundedMovies_single);
         }
     }
 }

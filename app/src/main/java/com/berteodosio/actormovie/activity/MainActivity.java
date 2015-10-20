@@ -27,10 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity implements MainView {
-    private static final String TAG = MainActivity.class.getSimpleName();
     private MainPresenter mPresenter;
 
-    private EditText mFirstActorName;
     private LinearLayout mLayout;
     private Button mShow;
     private FloatingActionButton mAdd;
@@ -44,20 +42,22 @@ public class MainActivity extends BaseActivity implements MainView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
+        getSupportActionBar().setTitle(R.string.main_activity_toolbarTitle);
+
         mPresenter = new MainPresenter(this);
         initComponents();
     }
 
     private void initComponents() {
-        mFirstActorName = (EditText) findViewById(R.id.main_activity_actorName);
+        EditText firstActorName = (EditText) findViewById(R.id.main_activity_actorName);
         mShow = (Button) findViewById(R.id.main_activity_showMovies);
         mAdd = (FloatingActionButton) findViewById(R.id.main_activity_addActor);
         mLayout = (LinearLayout) findViewById(R.id.main_activity_editTextLayout);
 
         initListeners();
 
-        mActorEditTextList.add(mFirstActorName);
-        initEditTextListener(mFirstActorName);
+        mActorEditTextList.add(firstActorName);
+        initEditTextListener(firstActorName);
     }
 
     private void initEditTextListener(EditText editText) {
