@@ -96,6 +96,14 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     private void onShowClick() {
+        for (EditText editText : mActorEditTextList) {
+            if (editText.getError() != null || editText.getText().toString().equals("")) {
+                Snackbar.make(editText, "Preencha todos os campos corretamente", Snackbar.LENGTH_SHORT)
+                        .show();
+                return;
+            }
+        }
+
         showLoading();
         ViewAnimation.doContractHorizontalAnimation(mShow);
 
@@ -130,7 +138,7 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 
@@ -138,7 +146,16 @@ public class MainActivity extends BaseActivity implements MainView {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
+        if (id == R.id.main_menu_remove) {
+            int childCount = mLayout.getChildCount();
+            if (childCount > 1) {
+                mLayout.removeViewAt(childCount - 1);
+                mActorEditTextList.remove(mActorEditTextList.size() - 1);
+            }
+            else {
+                Snackbar.make(mShow, "Pelo menos um ator deve ser mantido", Snackbar.LENGTH_SHORT)
+                        .show();
+            }
             return true;
         }
 
