@@ -7,7 +7,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,7 +48,7 @@ public class MainActivity extends BaseActivity implements MainView {
         // TODO add no internet verification
         getSupportActionBar().setTitle(R.string.main_activity_toolbarTitle);
 
-        mPresenter = new MainPresenter(this);
+        mPresenter = new MainPresenter(this, this);
         initComponents();
     }
 
@@ -161,6 +160,13 @@ public class MainActivity extends BaseActivity implements MainView {
                 mNameNotFound = false;
             }
         }, 500);
+    }
+
+    @Override
+    public void displayNoInternetAccess() {
+        hideLoading();
+        Snackbar.make(mShow, "Sem acesso à internet", Snackbar.LENGTH_LONG)
+                .show();
     }
 
     @Override

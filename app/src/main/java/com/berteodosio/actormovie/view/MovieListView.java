@@ -9,4 +9,5 @@ import java.util.List;
  */
 public interface MovieListView {
     void displayMovieList(List<Movie> movieList);
+    void displayNoInternetAccess();
 }

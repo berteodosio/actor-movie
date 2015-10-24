@@ -1,9 +1,11 @@
 package com.berteodosio.actormovie.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.TextView;
 
 import com.berteodosio.actormovie.R;
@@ -27,6 +29,8 @@ public class MovieListActivity extends BaseActivity implements MovieListView {
     private List<Integer> mActorIds;
     private List<List<Movie>> mActorsMoviesList = new ArrayList<>();
 
+    private View mContent;  // para evitar vários findViewById na snackbar
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +38,7 @@ public class MovieListActivity extends BaseActivity implements MovieListView {
 
         showLoading();
 
+        mContent = findViewById(android.R.id.content);
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
@@ -62,7 +67,7 @@ public class MovieListActivity extends BaseActivity implements MovieListView {
             ((TextView) findViewById(R.id.movie_list_activity_searchedActors))
                     .setText(R.string.movie_list_activity_serachedActors_single);
 
-        mPresenter = new MovieListPresenter(this);
+        mPresenter = new MovieListPresenter(this, this);
         for (Integer i : mActorIds)
             mPresenter.loadMovies(i);
     }
@@ -79,5 +84,11 @@ public class MovieListActivity extends BaseActivity implements MovieListView {
                 ((TextView) findViewById(R.id.movie_list_activity_foundedMovies))
                         .setText(R.string.movie_list_activity_foundedMovies_single);
         }
+    }
+
+    @Override
+    public void displayNoInternetAccess() {
+        hideLoading();
+        Snackbar.make(mContent, "Sem acesso à internet", Snackbar.LENGTH_LONG);
     }
 }

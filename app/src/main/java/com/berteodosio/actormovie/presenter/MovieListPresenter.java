@@ -1,7 +1,10 @@
 package com.berteodosio.actormovie.presenter;
 
+import android.content.Context;
+
 import com.berteodosio.actormovie.asynctask.LoadMoviesAsyncTask;
 import com.berteodosio.actormovie.callback.LoadMoviesCallback;
+import com.berteodosio.actormovie.info.InternetInfo;
 import com.berteodosio.actormovie.model.Movie;
 import com.berteodosio.actormovie.model.MovieActor;
 import com.berteodosio.actormovie.view.MovieListView;
@@ -14,12 +17,18 @@ import java.util.List;
  */
 public class MovieListPresenter implements LoadMoviesCallback {
     private MovieListView mView;
+    private Context mContext;
 
-    public MovieListPresenter(MovieListView view) {
+    public MovieListPresenter(MovieListView view, Context context) {
         mView = view;
+        mContext = context;
     }
 
     public void loadMovies(int actorId) {
+        if (!InternetInfo.isConnectedToInternet(mContext)) {
+            mView.displayNoInternetAccess();
+            return;
+        }
         new LoadMoviesAsyncTask(this).execute(actorId);
     }
 
